@@ -10,6 +10,11 @@ namespace Jeeves.Web.Controllers
 {
     public class SensorController : Controller
     {
+        /// <summary>
+        /// Logs the temperature to the database.
+        /// </summary>
+        /// <param name="temp">Model of the temperature.</param>
+        /// <returns>The added temperature object.</returns>
         public Temperature LogTemperature(Temperature temp)
         {
             using (var db = new DataContext())
