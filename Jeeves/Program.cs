@@ -16,10 +16,13 @@ namespace Jeeves
 {
     public partial class Program
     {
+        const string BASE_WEBADDRESS = "http://192.168.1.2:7756/";
+
         void ProgramStarted()
         {
             SetupEthernet();
             SetupEvents();
+            PollTemperature();
         }
  
         /// <summary>
@@ -52,8 +55,38 @@ namespace Jeeves
             // event for turning the light on and off
             var webEventUpdateLightStatus = WebServer.SetupWebEvent("light");
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
-
         }
+
+        void PollTemperature()
+        {
+            var getCurrentTemperature = new GT.Timer(300000);
+            getCurrentTemperature.Tick += getCurrentTemperature_Tick;
+
+            getCurrentTemperature.Start();
+        }
+
+        void getCurrentTemperature_Tick(GT.Timer tick)
+        {
+            var currentTemp = tempHumidSI70.TakeMeasurement().TemperatureFahrenheit;
+            var postContext = new POSTContent();
+
+            var currentDateTime = DateTime.Now.ToString("MM/dd/yyyy") + "%20" + DateTime.Now.ToString("HH:MM:ss");
+
+            var requestUrl = BASE_WEBADDRESS + "Sensor/LogTemperature?ReadDate=" + currentDateTime + "&Reading=" + (int)currentTemp;
+            var request = HttpHelper.CreateHttpPostRequest(requestUrl, postContext, null);
+
+            request.ResponseReceived += new HttpRequest.ResponseHandler(req_ResponseReceived);
+            request.SendRequest();
+        }
+
+        void req_ResponseReceived(HttpRequest sender, HttpResponse response)
+        {
+            if(response.StatusCode != "200")
+            {
+                //networkdown.. do stuff?
+            }
+        }
+
         /// <summary>
         /// Event for turning the light on and off
         /// </summary>
