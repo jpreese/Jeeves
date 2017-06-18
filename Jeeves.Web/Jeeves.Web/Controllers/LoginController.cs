@@ -44,7 +44,7 @@ namespace Jeeves.Web.Controllers
         /// <returns>User model of the user if one is found, otherwise null.</returns>
         private User GetUserFromUserContext(User userModel)
         {
-            using(var db = new UserContext())
+            using(var db = new DataContext())
             {
                 return db.Users.FirstOrDefault(u => u.Username == userModel.Username);
             }

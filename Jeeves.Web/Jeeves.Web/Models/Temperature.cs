@@ -8,8 +8,8 @@ namespace Jeeves.Web.Models
 {
     public class Temperature
     {
-        public int Reading { get; set; }
-
+        public int TemperatureID { get; set; }
         public DateTime ReadDate { get; set; }
+        public int Reading { get; set; }
     }
 }
