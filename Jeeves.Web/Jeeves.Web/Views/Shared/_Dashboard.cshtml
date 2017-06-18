@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Jeeves.Web.Models.Temperature>
+@{
     ViewBag.Title = "Dashboard";
 }
 
@@ -22,26 +23,14 @@
             </tr>
         </thead>
         <tbody>
+            @foreach (var temperature in Model)
+            {
             <tr>
                 <td>1</td>
-                <td>06/10/15 13:30</td>
-                <td>70</td>
+                <td>@temperature.ReadDate</td>
+                <td>@temperature.Reading</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>06/10/15 13:00</td>
-                <td>68</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>06/10/15 12:30</td>
-                <td>64</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>06/10/15 12:00</td>
-                <td>60</td>
-            </tr>
+            }
         </tbody>
     </table>
 
