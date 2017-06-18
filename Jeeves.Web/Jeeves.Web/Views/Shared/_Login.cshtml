@@ -1,0 +1,28 @@
+﻿@model Jeeves.Web.Models.User
+
+@{
+    ViewBag.Title = "Login";
+}
+
+@using (Html.BeginForm("Login", "Login", FormMethod.Post))
+{
+<div class="container">
+
+    <p class="lead text-danger">@Html.ValidationSummary(true)</p>
+
+    <div class="form-group">
+        <label class="control-label" for="Username">@Html.LabelFor(m => m.Username)</label>
+        @Html.TextBoxFor(m => m.Username, new { @class = "form-control input-sm", autofocus = "autofocus" })
+    </div>
+
+    <div class="form-group">
+        <label class="control-label" for="Password">@Html.LabelFor(m => m.Password)</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control input-sm" })
+    </div>
+
+    <input type="submit" value="Login" class="btn btn-info" />
+</div>
+}
+
+
+ 

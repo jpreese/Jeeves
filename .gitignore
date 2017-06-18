@@ -1,0 +1,10 @@
+*.pp
+packages/
+Jeeves/bin/
+Jeeves.Web/Jeeves.Web/bin/
+Jeeves/obj/
+Jeeves.Web/Jeeves.Web.Tests/bin/
+*.mdf
+*.ldf
+Jeeves.Web/Jeeves.Web/obj/Debug/Jeeves.Web.csproj.FileListAbsolute.txt
+Jeeves.Web/Jeeves.Web.Tests/obj/Debug/Jeeves.Web.Tests.csproj.FileListAbsolute.txt

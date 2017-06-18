@@ -1,0 +1,8 @@
+﻿@if (Request.IsAuthenticated)
+{
+    @Html.Partial("_Dashboard")
+}
+else
+{
+    @Html.Partial("_Login")
+}
