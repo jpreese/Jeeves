@@ -8,3 +8,4 @@ Jeeves.Web/Jeeves.Web.Tests/bin/
 *.ldf
 Jeeves.Web/Jeeves.Web/obj/Debug/Jeeves.Web.csproj.FileListAbsolute.txt
 Jeeves.Web/Jeeves.Web.Tests/obj/Debug/Jeeves.Web.Tests.csproj.FileListAbsolute.txt
+*.force
