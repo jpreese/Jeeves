@@ -49,9 +49,6 @@ namespace Jeeves
         /// </summary>
         void SetupEvents()
         {
-            // default event
-            WebServer.DefaultEvent.WebEventReceived += DefaultEvent_WebEventReceived;
-
             // event for turning the light on and off
             var webEventUpdateLightStatus = WebServer.SetupWebEvent("light");
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
@@ -103,16 +100,6 @@ namespace Jeeves
             {
                 relayX1.TurnOff();
             }
-        }
-
-        void DefaultEvent_WebEventReceived(string path, WebServer.HttpMethod method, Responder responder)
-        {
-            string _data = "<html><head></head><body><h1>.NET Gadgeteer</h1>"
-                            + " <p>IT'S UP AND RUNNING YO.  -  <3 John</p>"
-                            + "<a href=\"http://68.37.152.77:4738/led?color=blue\">BLUE</a>&nbsp;&nbsp;&nbsp;<a href=\"http://68.37.152.77:4738/led?color=red\">RED</a>&nbsp;&nbsp;&nbsp;<a href=\"http://68.37.152.77:4738/led?color=purple\">PURPLE</a>"
-                            + "</body></html>";
-
-            responder.Respond(System.Text.Encoding.UTF8.GetBytes(_data), "text/html;charset=utf-8");
         }
     }
 }
