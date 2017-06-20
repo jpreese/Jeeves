@@ -23,13 +23,15 @@
             </tr>
         </thead>
         <tbody>
+            @{ int i = 1; }
             @foreach (var temperature in Model)
             {
-            <tr>
-                <td>1</td>
-                <td>@temperature.ReadDate</td>
-                <td>@temperature.Reading</td>
-            </tr>
+                <tr>
+                    <td>@i</td>
+                    <td>@temperature.ReadDate</td>
+                    <td>@temperature.Reading</td>
+                </tr>
+                i++;
             }
         </tbody>
     </table>
