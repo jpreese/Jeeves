@@ -39,5 +39,35 @@ namespace Jeeves.Web.Tests
             // Assert
             Assert.IsFalse(authResult);
         }
+
+        [TestMethod]
+        public void UserPasswordMatches()
+        {
+            // Arrange
+            var _userRepository = new Mock<IUserRepository>();
+            var sut = new UserValidationProvider(_userRepository.Object);
+
+            // mock user to be returned by entity
+            var mockUser = new User
+            {
+                Username = "testuser",
+                Password = "abc123"
+            };
+
+            // credentials typed in by the user
+            var testUser = new User
+            {
+                Username = "testuser",
+                Password = "abc123"
+            };
+
+            _userRepository.Setup(u => u.GetUserByUsername(mockUser.Username)).Returns(mockUser);
+
+            // Act
+            var authResult = sut.VerifyUserCredentials(testUser);
+
+            // Assert
+            Assert.IsTrue(authResult);
+        }
     }
 }
