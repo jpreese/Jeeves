@@ -56,8 +56,7 @@ namespace Jeeves
 
         void PollTemperature()
         {
-            const int FIVE_MINUTES_IN_MS = 300000;
-            var getCurrentTemperature = new GT.Timer(FIVE_MINUTES_IN_MS);
+            var getCurrentTemperature = new GT.Timer(300000);
             getCurrentTemperature.Tick += getCurrentTemperature_Tick;
 
             getCurrentTemperature.Start();
