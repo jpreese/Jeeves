@@ -6,8 +6,8 @@ using Jeeves.Web.Models;
 
 namespace Jeeves.Web.Data
 {
-    public interface IUserValidationProvider
+    public interface IUserRepository
     {
-        bool VerifyUserCredentials(User userModel);
+        User GetUserByUsername(string userName);
     }
 }

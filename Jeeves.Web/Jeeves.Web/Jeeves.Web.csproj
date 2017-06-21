@@ -132,6 +132,8 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SensorController.cs" />
     <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\IUserRepository.cs" />
+    <Compile Include="Data\UserRepository.cs" />
     <Compile Include="Data\UserValidationProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

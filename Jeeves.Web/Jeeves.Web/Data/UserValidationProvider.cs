@@ -9,34 +9,22 @@ namespace Jeeves.Web.Data
 {
     public class UserValidationProvider : IUserValidationProvider
     {
-        /// <summary>
-        /// Checks to see if the user exists in the database.
-        /// </summary>
-        /// <param name="userModel"></param>
-        /// <returns></returns>
-        public bool VerifyUserExists(User userModel)
+        private readonly IUserRepository _userRepository = new UserRepository();
+
+        public UserValidationProvider(IUserRepository userRepository)
         {
-            using (var db = new DataContext())
-            {
-                return db.Users.First(u => u.Username == userModel.Username) != null ? true : false;
-            }
+            _userRepository = userRepository;
         }
 
         /// <summary>
         /// Validates that the users credentials match
         /// </summary>
-        /// <param name="userModel"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// <param name="userModel">The usermodel to verify.</param>
+        /// <returns>True if the credentials match, false otherwise.</returns>
         public bool VerifyUserCredentials(User userModel)
         {
-            User userFromEntity;
-            using (var db = new DataContext())
-            {
-                userFromEntity = db.Users.First(u => u.Username == userModel.Username);
-            }
-
-            return userModel.Password == userFromEntity.Password ? true : false;
+            var userFromEntity = _userRepository.GetUserByUsername(userModel.Username);
+            return userFromEntity.Password == userModel.Password;
         }
     }
 }

@@ -19,15 +19,16 @@ namespace Jeeves.Web.Controllers
         [HttpPost]
         public ActionResult Authenticate(User userModel)
         {
-            var _userValidationProvider = new UserValidationProvider();
+            var _userRepository = new UserRepository();
+            var _userValidationProvider = new UserValidationProvider(_userRepository);
 
-            if (_userValidationProvider.VerifyUserExists(userModel))
+            if (_userRepository.GetUserByUsername(userModel.Username) == null)
             {
                 ModelState.AddModelError("", "The provided Username does not exist.");
                 return View("_Login", userModel);
             }
 
-            if (_userValidationProvider.VerifyUserCredentials(userModel))
+            if (_userValidationProvider.VerifyUserCredentials(userModel) == false)
             {
                 ModelState.AddModelError("", "The provided password was incorrect.");
                 return View("_Login", userModel);
