@@ -9,7 +9,7 @@ namespace Jeeves.Web.Data
 {
     public class UserValidationProvider : IUserValidationProvider
     {
-        private readonly IUserRepository _userRepository = new UserRepository();
+        private readonly IUserRepository _userRepository;
 
         public UserValidationProvider(IUserRepository userRepository)
         {
