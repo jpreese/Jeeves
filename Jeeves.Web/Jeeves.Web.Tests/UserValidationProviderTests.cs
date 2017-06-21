@@ -11,22 +11,30 @@ namespace Jeeves.Web.Tests
     public class UserValidationProviderTests
     {
         [TestMethod]
-        public void UsersDoesNotExist()
+        public void UserPasswordDoesNotMatch()
         {
             // Arrange
-            var sut = new Mock<IUserValidationProvider>();
+            var _userRepository = new Mock<IUserRepository>();
+            var sut = new UserValidationProvider(_userRepository.Object);
 
-            // test user to pass into the authenticate method
-            var testUser = new User
+            // mock user to be returned by entity
+            var mockUser = new User
             {
                 Username = "testuser",
                 Password = "abc123"
             };
 
-            sut.Setup(auth => auth.VerifyUserExists(testUser)).Returns<User>(null);
+            // credentials typed in by the user
+            var testUser = new User
+            {
+                Username = "testuser",
+                Password = "thisisthewrongpassword"
+            };
+
+            _userRepository.Setup(u => u.GetUserByUsername(mockUser.Username)).Returns(mockUser);
 
             // Act
-            var authResult = sut.Object.VerifyUserExists(testUser);
+            var authResult = sut.VerifyUserCredentials(testUser);
 
             // Assert
             Assert.IsFalse(authResult);
