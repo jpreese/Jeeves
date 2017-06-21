@@ -19,15 +19,15 @@ namespace Jeeves.Web.Controllers
         [HttpPost]
         public ActionResult Authenticate(User userModel)
         {
-            var userFromEntity = GetUserFromUserContext(userModel);
+            var _userValidationProvider = new UserValidationProvider();
 
-            if(userFromEntity == null)
+            if (_userValidationProvider.VerifyUserExists(userModel))
             {
                 ModelState.AddModelError("", "The provided Username does not exist.");
                 return View("_Login", userModel);
             }
 
-            if (userFromEntity.Password != userModel.Password)
+            if (_userValidationProvider.VerifyUserCredentials(userModel))
             {
                 ModelState.AddModelError("", "The provided password was incorrect.");
                 return View("_Login", userModel);
@@ -36,19 +36,5 @@ namespace Jeeves.Web.Controllers
             FormsAuthentication.SetAuthCookie(userModel.Username, false);
             return RedirectToAction("Index", "Home");
         }
-
-        /// <summary>
-        /// Gets a user from the database.
-        /// </summary>
-        /// <param name="userModel">The user to retrieve.</param>
-        /// <returns>User model of the user if one is found, otherwise null.</returns>
-        private User GetUserFromUserContext(User userModel)
-        {
-            using(var db = new DataContext())
-            {
-                return db.Users.FirstOrDefault(u => u.Username == userModel.Username);
-            }
-        }
-
     }
 }

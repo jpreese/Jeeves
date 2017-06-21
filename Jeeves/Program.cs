@@ -49,7 +49,6 @@ namespace Jeeves
         /// </summary>
         void SetupEvents()
         {
-            // event for turning the light on and off
             var webEventUpdateLightStatus = WebServer.SetupWebEvent("light");
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
         }

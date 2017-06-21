@@ -132,9 +132,11 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SensorController.cs" />
     <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\UserValidationProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Data\IUserValidationProvider.cs" />
     <Compile Include="Models\Temperature.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -159,6 +161,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
