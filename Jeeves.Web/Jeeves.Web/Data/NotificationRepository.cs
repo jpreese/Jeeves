@@ -8,25 +8,28 @@ namespace Jeeves.Web.Data
 {
     public class NotificationRepository : INotificationRepository
     {
+        private readonly ITemperatureRepository _temperatureRepository;
+
+        public NotificationRepository(ITemperatureRepository temperatureRepository)
+        {
+            _temperatureRepository = temperatureRepository;
+        }
+
         public Notification GetNotification()
         {
             return CheckForTemperatureNotification();
         }
 
+        /// <summary>
+        /// Gets a notification to display to the user.
+        /// </summary>
+        /// <returns>A notification object representing a notification.</returns>
         private Notification CheckForTemperatureNotification()
         {
-            // these values are baselines to provide notifications
-            const int MAX_COMFORTABLE_TEMP = 80;
-            const int MIN_COMFORTABLE_TEMP = 60;
             var notification = new Notification();
+            IEnumerable<Temperature> temps = _temperatureRepository.GetLatestTemperatureReadings();
 
-            IEnumerable<Temperature> temps;
-            using(var db = new DataContext())
-            {
-                temps = db.Temperatures.Where(t => t.Reading > MAX_COMFORTABLE_TEMP || t.Reading < MIN_COMFORTABLE_TEMP).ToList();
-            }
-
-            if(temps.Count() > 0)
+            if(RecentTemperatureExceedsThreshold(temps))
             {
                 notification.NotificationType = NotificationType.Alert;
                 notification.NotificationText = "One or more temperatures exceed the threshold.";
@@ -38,6 +41,21 @@ namespace Jeeves.Web.Data
             }
 
             return notification;
+        }
+
+        /// <summary>
+        /// Checks a list of temperatures to see if any exceed the preset threshold.
+        /// </summary>
+        /// <param name="temperatureList"></param>
+        /// <returns>True if a temperature exceeds the threshold, false otherwise.</returns>
+        internal bool RecentTemperatureExceedsThreshold(IEnumerable<Temperature> temperatureList)
+        {
+            // these values are baselines to provide notifications
+            const int MAX_COMFORTABLE_TEMP = 80;
+            const int MIN_COMFORTABLE_TEMP = 60;
+
+            var listSize = temperatureList.Where(t => t.Reading > MAX_COMFORTABLE_TEMP || t.Reading < MIN_COMFORTABLE_TEMP).Count();
+            return listSize > 0 ? true : false;
         }
 
     }

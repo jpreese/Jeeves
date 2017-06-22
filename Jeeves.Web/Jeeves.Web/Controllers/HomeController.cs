@@ -16,20 +16,15 @@ namespace Jeeves.Web.Controllers
         /// <returns>The Home view.</returns>
         public ActionResult Index()
         {
-            INotificationRepository _notificationRepository = new NotificationRepository();
+            ITemperatureRepository _temperatureRepository = new TemperatureRepository();
+            INotificationRepository _notificationRepository = new NotificationRepository(_temperatureRepository);
 
             if (Request.IsAuthenticated)
             {
-                IEnumerable<Temperature> temps;
-                using (var db = new DataContext())
-                {
-                    temps = db.Temperatures.Take(5).OrderByDescending(m => m.ReadDate).ToList();
-                }
-
-                ViewBag.Temperatures = temps;
+                ViewBag.Temperatures = _temperatureRepository.GetLatestTemperatureReadings();
                 ViewBag.Notification = _notificationRepository.GetNotification();
 
-                return View("_Dashboard", temps);
+                return View("_Dashboard");
             }
             else
             {
