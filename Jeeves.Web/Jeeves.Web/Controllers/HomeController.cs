@@ -16,6 +16,8 @@ namespace Jeeves.Web.Controllers
         /// <returns>The Home view.</returns>
         public ActionResult Index()
         {
+            INotificationRepository _notificationRepository = new NotificationRepository();
+
             if (Request.IsAuthenticated)
             {
                 IEnumerable<Temperature> temps;
@@ -23,6 +25,9 @@ namespace Jeeves.Web.Controllers
                 {
                     temps = db.Temperatures.Take(5).OrderByDescending(m => m.ReadDate).ToList();
                 }
+
+                ViewBag.Temperatures = temps;
+                ViewBag.Notification = _notificationRepository.GetNotification();
 
                 return View("_Dashboard", temps);
             }

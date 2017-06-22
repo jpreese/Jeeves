@@ -1,16 +1,26 @@
 ﻿@model IEnumerable<Jeeves.Web.Models.Temperature>
+@using Jeeves.Web.Models
+
 @{
     ViewBag.Title = "Dashboard";
 }
 
 <div class="container">
 
-    <div class="panel panel-success">
+    @if(ViewBag.Notification.NotificationType == NotificationType.Alert)
+    { 
+        @:<div class="panel panel-danger">
+    }
+
+    @if(ViewBag.Notification.NotificationType == NotificationType.Information)
+    {
+        @:<div class="panel panel-success">
+    }
         <div class="panel-heading">
-            <h3 class="panel-title"><i class="fa fa-check-square-o">&nbsp;</i>System OK</h3>
+            <h3 class="panel-title"><i class="fa fa-heartbeat">&nbsp;</i>System Health</h3>
         </div>
         <div class="panel-body">
-            Everything is running as expected!
+            @ViewBag.Notification.NotificationText
         </div>
     </div>
 
@@ -24,7 +34,7 @@
         </thead>
         <tbody>
             @{ int i = 1; }
-            @foreach (var temperature in Model)
+            @foreach (var temperature in ViewBag.Temperatures)
             {
                 <tr>
                     <td>@i</td>
