@@ -18,6 +18,9 @@ namespace Jeeves
     {
         const string BASE_WEBADDRESS = "http://192.168.1.2:7756/";
 
+        /// <summary>
+        /// Initial method call on device boot up.
+        /// </summary>
         void ProgramStarted()
         {
             SetupEthernet();
@@ -38,9 +41,6 @@ namespace Jeeves
                 Thread.Sleep(1000);
             }
 
-            Debug.Print("Found IP: " + ethernet.NetworkInterface.IPAddress);
-            Debug.Print("Network Up: " + ethernet.IsNetworkUp);
-
             WebServer.StartLocalServer(ethernet.NetworkInterface.IPAddress, 4738);
         }
 
@@ -53,6 +53,32 @@ namespace Jeeves
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
         }
 
+        /// <summary>
+        /// Verifies that the device can reach the outside world every one minute.
+        /// </summary>
+        void CheckInternetConnectivity()
+        {
+            const int ONE_MINUTE_IN_MS = 60000;
+            var pingInternetConnectivity = new GT.Timer(ONE_MINUTE_IN_MS);
+
+            pingInternetConnectivity.Tick += pingInternetConnectivity_Tick;
+        }
+
+        /// <summary>
+        /// If no network is detected, setup the ethernet on the device.
+        /// </summary>
+        /// <param name="tick">The timer.</param>
+        void pingInternetConnectivity_Tick(GT.Timer tick)
+        {
+            if(ethernet.IsNetworkUp == false)
+            {
+                SetupEthernet();
+            }
+        }
+
+        /// <summary>
+        /// Periodically called to get the current temperature of the environment.
+        /// </summary>
         void PollTemperature()
         {
             const int FIVE_MINUTES_IN_MS = 300000;
@@ -62,6 +88,10 @@ namespace Jeeves
             getCurrentTemperature.Start();
         }
 
+        /// <summary>
+        /// Takes a snapshop of the current temperature, and relays the information to the MVC web application.
+        /// </summary>
+        /// <param name="tick">The timer.</param>
         void getCurrentTemperature_Tick(GT.Timer tick)
         {
             var currentTemp = tempHumidSI70.TakeMeasurement().TemperatureFahrenheit;
@@ -72,16 +102,7 @@ namespace Jeeves
             var requestUrl = BASE_WEBADDRESS + "Sensor/LogTemperature?ReadDate=" + currentDateTime + "&Reading=" + (int)currentTemp;
             var request = HttpHelper.CreateHttpPostRequest(requestUrl, postContext, null);
 
-            request.ResponseReceived += new HttpRequest.ResponseHandler(req_ResponseReceived);
             request.SendRequest();
-        }
-
-        void req_ResponseReceived(HttpRequest sender, HttpResponse response)
-        {
-            if(response.StatusCode != "200")
-            {
-                //networkdown.. do stuff?
-            }
         }
 
         /// <summary>
