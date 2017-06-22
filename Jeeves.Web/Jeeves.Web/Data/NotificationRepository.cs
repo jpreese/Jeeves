@@ -37,7 +37,7 @@ namespace Jeeves.Web.Data
             else
             {
                 notification.NotificationType = NotificationType.Information;
-                notification.NotificationText = "System is running as expected.";
+                notification.NotificationText = "The system is running as expected.";
             }
 
             return notification;
@@ -55,7 +55,7 @@ namespace Jeeves.Web.Data
             const int MIN_COMFORTABLE_TEMP = 60;
 
             var listSize = temperatureList.Where(t => t.Reading > MAX_COMFORTABLE_TEMP || t.Reading < MIN_COMFORTABLE_TEMP).Count();
-            return listSize > 0 ? true : false;
+            return listSize > 0;
         }
 
     }
