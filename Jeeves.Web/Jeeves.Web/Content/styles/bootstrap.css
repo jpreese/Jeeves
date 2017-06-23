@@ -7,6 +7,7 @@
  * Based on Bootstrap
 */
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -6739,4 +6740,23 @@ a.list-group-item-danger.active:focus {
 }
 .popover {
   color: #333333;
+}
+
+
+.navbar-nav {
+	margin:0;
+}
+.navbar-nav > li {
+	float:none;
+    display:inline-block;
+}
+.navbar-nav > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.navbar-nav > li.open > ul.dropdown-menu {
+  position: absolute;
+  border: 1px;
+  -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
 }

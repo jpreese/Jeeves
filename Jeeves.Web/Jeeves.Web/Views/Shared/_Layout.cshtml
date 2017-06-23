@@ -9,21 +9,16 @@
 </head>
 <body>
 
-    <div class="navbar navbar-default">
+    <div class="navbar navbar-default nav-links">
         <div class="container">
-            <div class="navbar-header">
-               <img src="~/Content/images/logo.png" alt="logo" class="navbar-brand-image" />
-               <a class="navbar-brand" href="/Home/">Jeeves</a>
-            </div>
-            <div class="navbar-collapse collapse" id="navbar-main">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="/Help/">Help</a>
-                    </li>
-                </ul>
-            </div>
+            <img src="~/Content/images/logo.png" alt="logo" class="navbar-brand-image" />
+            <a class="navbar-brand" href="/Home/">Jeeves</a>
+            <ul class="nav navbar-nav">
+                <li><a href="/Help/">Help</a></li>
+            </ul>
         </div>
     </div>
+
 
     @RenderBody()
 </body>
