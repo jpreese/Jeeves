@@ -12,6 +12,5 @@ namespace Jeeves.Web.Controllers
         {
             return View("_Help");
         }
-
     }
 }
