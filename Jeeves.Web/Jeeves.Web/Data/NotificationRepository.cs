@@ -10,21 +10,20 @@ namespace Jeeves.Web.Data
     {
         private readonly ITemperatureRepository _temperatureRepository;
 
+        /// <summary>
+        /// Notification Repository constructor.
+        /// </summary>
+        /// <param name="temperatureRepository">A temperature repository.</param>
         public NotificationRepository(ITemperatureRepository temperatureRepository)
         {
             _temperatureRepository = temperatureRepository;
-        }
-
-        public Notification GetNotification()
-        {
-            return CheckForTemperatureNotification();
         }
 
         /// <summary>
         /// Gets a notification to display to the user.
         /// </summary>
         /// <returns>A notification object representing a notification.</returns>
-        private Notification CheckForTemperatureNotification()
+        public Notification GetNotification()
         {
             var notification = new Notification();
             IEnumerable<Temperature> temps = _temperatureRepository.GetLatestTemperatureReadings();

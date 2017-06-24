@@ -11,6 +11,10 @@ namespace Jeeves.Web.Data
     {
         private readonly IUserRepository _userRepository;
 
+        /// <summary>
+        /// UserValidationProvider constructor.
+        /// </summary>
+        /// <param name="userRepository">A user repository.</param>
         public UserValidationProvider(IUserRepository userRepository)
         {
             _userRepository = userRepository;

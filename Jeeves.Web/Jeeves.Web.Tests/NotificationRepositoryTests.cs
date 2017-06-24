@@ -22,7 +22,7 @@ namespace Jeeves.Web.Tests
             mockLatestTemps.Add(new Temperature { Reading = 80 });
             mockLatestTemps.Add(new Temperature { Reading = 85 }); // 85 is outside of the 60-80 range
 
-            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings()).Returns(mockLatestTemps);
+            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings(5)).Returns(mockLatestTemps);
 
             // Act
             var checkTemps = sut.RecentTemperatureExceedsThreshold(mockLatestTemps);
@@ -43,7 +43,7 @@ namespace Jeeves.Web.Tests
             mockLatestTemps.Add(new Temperature { Reading = 80 });
             mockLatestTemps.Add(new Temperature { Reading = 55 }); // 55 is outside of the 60-80 range
 
-            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings()).Returns(mockLatestTemps);
+            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings(5)).Returns(mockLatestTemps);
 
             // Act
             var checkTemps = sut.RecentTemperatureExceedsThreshold(mockLatestTemps);
@@ -65,7 +65,7 @@ namespace Jeeves.Web.Tests
             mockLatestTemps.Add(new Temperature { Reading = 80 });
             mockLatestTemps.Add(new Temperature { Reading = 70 });
 
-            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings()).Returns(mockLatestTemps);
+            _temperatureRepository.Setup(t => t.GetLatestTemperatureReadings(5)).Returns(mockLatestTemps);
 
             // Act
             var checkTemps = sut.RecentTemperatureExceedsThreshold(mockLatestTemps);

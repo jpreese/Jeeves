@@ -8,6 +8,6 @@ namespace Jeeves.Web.Data
 {
     public interface ITemperatureRepository
     {
-        IEnumerable<Temperature> GetLatestTemperatureReadings();
+        IEnumerable<Temperature> GetLatestTemperatureReadings(int numberOfReadings = 5);
     }
 }
