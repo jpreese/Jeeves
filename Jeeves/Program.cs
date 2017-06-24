@@ -35,13 +35,25 @@ namespace Jeeves
         {
             ethernet.UseThisNetworkInterface();
 
-            while(ethernet.NetworkInterface.IPAddress == "0.0.0.0")
-            {
-                Debug.Print("Establishing IP...");
-                Thread.Sleep(1000);
-            }
+            const int ONE_SECOND_IN_MS = 1000;
+            var checkIPAddress = new GT.Timer(ONE_SECOND_IN_MS);
 
-            WebServer.StartLocalServer(ethernet.NetworkInterface.IPAddress, 4738);
+            checkIPAddress.Tick += checkIPAddress_Tick;
+            checkIPAddress.Start();
+        }
+
+        /// <summary>
+        /// Checks to see if an IP Address has been established.
+        /// </summary>
+        /// <param name="tick"></param>
+        void checkIPAddress_Tick(GT.Timer tick)
+        {
+            const int WEB_SERVER_DEFAULT_PORT = 4738;
+            if (ethernet.NetworkInterface.IPAddress != "0.0.0.0")
+            {
+                WebServer.StartLocalServer(ethernet.NetworkInterface.IPAddress, WEB_SERVER_DEFAULT_PORT);
+                tick.Stop();
+            }
         }
 
         /// <summary>
