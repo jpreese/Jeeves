@@ -23,8 +23,7 @@ namespace Jeeves
         /// </summary>
         void ProgramStarted()
         {
-            SetupEthernet();
-            InitEvents();
+            Init();
         }
  
         /// <summary>
@@ -60,11 +59,12 @@ namespace Jeeves
         /// <summary>
         /// Sets up all of the events the device will be listening for.
         /// </summary>
-        void InitEvents()
+        void Init()
         {
             var webEventUpdateLightStatus = WebServer.SetupWebEvent("light");
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
 
+            SetupEthernet();
             StartTemperaturePolling();
         }
 
@@ -110,6 +110,12 @@ namespace Jeeves
         /// <param name="tick">The timer.</param>
         void getCurrentTemperature_Tick(GT.Timer tick)
         {
+            // don't poll for a temperature if the device isn't connected to the internet
+            if(ethernet.IsNetworkUp == false)
+            {
+                return;
+            }
+
             var currentTemp = tempHumidSI70.TakeMeasurement().TemperatureFahrenheit;
             var currentDateTime = DateTime.Now.ToString("MM/dd/yyyy") + "%20" + DateTime.Now.ToString("HH:MM:ss");
             var requestUrl = BASE_WEBADDRESS + "Sensor/LogTemperature?ReadDate=" + currentDateTime + "&Reading=" + (int)currentTemp;
