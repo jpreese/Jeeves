@@ -24,8 +24,7 @@ namespace Jeeves
         void ProgramStarted()
         {
             SetupEthernet();
-            SetupEvents();
-            PollTemperature();
+            InitEvents();
         }
  
         /// <summary>
@@ -53,16 +52,20 @@ namespace Jeeves
             {
                 WebServer.StartLocalServer(ethernet.NetworkInterface.IPAddress, WEB_SERVER_DEFAULT_PORT);
                 tick.Stop();
+
+                CheckInternetConnectivity();
             }
         }
 
         /// <summary>
         /// Sets up all of the events the device will be listening for.
         /// </summary>
-        void SetupEvents()
+        void InitEvents()
         {
             var webEventUpdateLightStatus = WebServer.SetupWebEvent("light");
             webEventUpdateLightStatus.WebEventReceived += webEventUpdateLightStatus_WebEventReceived;
+
+            StartTemperaturePolling();
         }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace Jeeves
             var pingInternetConnectivity = new GT.Timer(ONE_MINUTE_IN_MS);
 
             pingInternetConnectivity.Tick += pingInternetConnectivity_Tick;
+            pingInternetConnectivity.Start();
         }
 
         /// <summary>
@@ -91,12 +95,12 @@ namespace Jeeves
         /// <summary>
         /// Periodically called to get the current temperature of the environment.
         /// </summary>
-        void PollTemperature()
+        void StartTemperaturePolling()
         {
             const int FIVE_MINUTES_IN_MS = 300000;
             var getCurrentTemperature = new GT.Timer(FIVE_MINUTES_IN_MS);
-            getCurrentTemperature.Tick += getCurrentTemperature_Tick;
 
+            getCurrentTemperature.Tick += getCurrentTemperature_Tick;
             getCurrentTemperature.Start();
         }
 
@@ -107,11 +111,10 @@ namespace Jeeves
         void getCurrentTemperature_Tick(GT.Timer tick)
         {
             var currentTemp = tempHumidSI70.TakeMeasurement().TemperatureFahrenheit;
-            var postContext = new POSTContent();
-
             var currentDateTime = DateTime.Now.ToString("MM/dd/yyyy") + "%20" + DateTime.Now.ToString("HH:MM:ss");
-
             var requestUrl = BASE_WEBADDRESS + "Sensor/LogTemperature?ReadDate=" + currentDateTime + "&Reading=" + (int)currentTemp;
+
+            var postContext = new POSTContent();
             var request = HttpHelper.CreateHttpPostRequest(requestUrl, postContext, null);
 
             request.SendRequest();
@@ -125,7 +128,8 @@ namespace Jeeves
         /// <param name="responder">Contains request data sent by the client and functionality to respond to the request.</param>
         void webEventUpdateLightStatus_WebEventReceived(string path, WebServer.HttpMethod method, Responder responder)
         {
-            if(responder.UrlParameters["status"].ToString() == "on")
+            var status = responder.UrlParameters["status"].ToString();
+            if(status == "on")
             {
                 relayX1.TurnOn();
             }
